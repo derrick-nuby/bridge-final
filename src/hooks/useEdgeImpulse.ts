@@ -1,13 +1,14 @@
 // hooks/useEdgeImpulse.ts
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 declare global {
   interface Window {
-    Module: any;
+    Module: unknown;
   }
 }
 
 export function useEdgeImpulse() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [classifier, setClassifier] = useState<any>(null);
 
   useEffect(() => {
