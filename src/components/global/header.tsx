@@ -24,7 +24,7 @@ export function Header() {
   const navItems = [
     { name: "Dashboard", icon: <LayoutDashboard className="h-4 w-4 mr-2" /> },
     { name: "Attendance Log", icon: <ClipboardList className="h-4 w-4 mr-2" /> },
-    { name: "Analytics", icon: <BarChart3 className="h-4 w-4 mr-2" /> },
+    { name: "Analytics", icon: <BarChart3 className="h-4 w-4 mr-2" />, url: "/attendance" },
     { name: "Settings", icon: <Settings className="h-4 w-4 mr-2" /> },
     { name: "Help", icon: <HelpCircle className="h-4 w-4 mr-2" /> },
   ];
@@ -46,7 +46,12 @@ export function Header() {
 
       <div className="flex items-center gap-4">
         {navItems.map((item) => (
-          <Button key={item.name} variant="ghost" className="text-white hover:bg-amber-700/50 hover:text-white">
+          <Button
+            key={item.name}
+            variant="ghost"
+            className="text-white hover:bg-amber-700/50 hover:text-white hover:cursor-pointer"
+            onClick={() => item.url && (window.location.href = item.url)}
+          >
             {item.icon}
             {item.name}
           </Button>
