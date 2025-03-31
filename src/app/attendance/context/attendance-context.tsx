@@ -1,60 +1,124 @@
-"use client"
+"use client";
 
-import { createContext, useContext, useState, type ReactNode } from "react"
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import { useRunClassification } from "@/hooks/useInferenceHooks";
 
 interface Student {
-  id: number
-  name: string
-  isPresent: boolean
-  lastSeen: Date | null
-  attendanceCount: number
-  participationScore: number
+  id: string;
+  name: string;
+  isPresent: boolean;
+  lastSeen: Date | null;
+  attendanceCount: number;
+  participationScore: number;
+}
+
+interface RecognitionResult {
+  label: string;
+  value: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 }
 
 interface AttendanceContextType {
-  students: Student[]
-  markAttendance: (studentId: number) => void
+  students: Student[];
+  markAttendance: (studentName: string, confidence: number) => void;
+  processRecognition: (imageData: string) => Promise<void>;
+  isProcessing: boolean;
+  lastRecognitionResult: RecognitionResult | null;
 }
 
-const AttendanceContext = createContext<AttendanceContextType | undefined>(undefined)
+const AttendanceContext = createContext<AttendanceContextType | undefined>(undefined);
 
-// Mock student data
-const initialStudents: Student[] = [
-  { id: 1, name: "John Doe", isPresent: false, lastSeen: null, attendanceCount: 15, participationScore: 85 },
-  { id: 2, name: "Jane Smith", isPresent: false, lastSeen: null, attendanceCount: 12, participationScore: 78 },
-  { id: 3, name: "Alice Smith", isPresent: false, lastSeen: null, attendanceCount: 14, participationScore: 92 },
-  { id: 4, name: "Bob Johnson", isPresent: false, lastSeen: null, attendanceCount: 10, participationScore: 65 },
-  { id: 5, name: "Charlie Brown", isPresent: false, lastSeen: null, attendanceCount: 13, participationScore: 75 },
-  { id: 6, name: "Diana Prince", isPresent: false, lastSeen: null, attendanceCount: 15, participationScore: 88 },
-  { id: 7, name: "Ethan Hunt", isPresent: false, lastSeen: null, attendanceCount: 11, participationScore: 70 },
-]
+export function AttendanceProvider({ children }: { children: ReactNode; }) {
+  const [students, setStudents] = useState<Student[]>([]);
+  const [lastRecognitionResult, setLastRecognitionResult] = useState<RecognitionResult | null>(null);
 
-export function AttendanceProvider({ children }: { children: ReactNode }) {
-  const [students, setStudents] = useState<Student[]>(initialStudents)
+  const { mutate, isPending, data } = useRunClassification();
 
-  const markAttendance = (studentId: number) => {
-    setStudents((prevStudents) =>
-      prevStudents.map((student) =>
-        student.id === studentId
-          ? {
+  // Initialize students from recognized people
+  useEffect(() => {
+    // This will populate the students array as people are recognized
+    // We start with an empty array and add students as they are detected
+  }, []);
+
+  // Process recognition results when data changes
+  useEffect(() => {
+    if (data?.success && data.data && data.data.results && data.data.results.length > 0) {
+      const recognizedPerson = data.data.results[0];
+      setLastRecognitionResult(recognizedPerson);
+
+      // Mark attendance for the recognized person
+      markAttendance(recognizedPerson.label, recognizedPerson.value);
+    }
+  }, [data]);
+
+  const markAttendance = (studentName: string, confidence: number) => {
+    setStudents((prevStudents) => {
+      // Check if student already exists
+      const existingStudentIndex = prevStudents.findIndex((s) => s.name.toLowerCase() === studentName.toLowerCase());
+
+      const now = new Date();
+
+      if (existingStudentIndex >= 0) {
+        // Update existing student
+        return prevStudents.map((student, index) =>
+          index === existingStudentIndex
+            ? {
               ...student,
               isPresent: true,
-              lastSeen: new Date(),
+              lastSeen: now,
               attendanceCount: student.attendanceCount + 1,
             }
-          : student,
-      ),
-    )
-  }
+            : student,
+        );
+      } else {
+        // Add new student
+        return [
+          ...prevStudents,
+          {
+            id: studentName.toLowerCase(),
+            name: studentName,
+            isPresent: true,
+            lastSeen: now,
+            attendanceCount: 1,
+            participationScore: Math.round(confidence * 100), // Initialize with confidence score
+          },
+        ];
+      }
+    });
+  };
 
-  return <AttendanceContext.Provider value={{ students, markAttendance }}>{children}</AttendanceContext.Provider>
+  const processRecognition = async (imageData: string): Promise<void> => {
+    try {
+      // Send the image data to the backend for classification
+      mutate(imageData);
+    } catch (error) {
+      console.error("Error processing recognition:", error);
+    }
+  };
+
+  return (
+    <AttendanceContext.Provider
+      value={{
+        students,
+        markAttendance,
+        processRecognition,
+        isProcessing: isPending,
+        lastRecognitionResult,
+      }}
+    >
+      {children}
+    </AttendanceContext.Provider>
+  );
 }
 
 export function useAttendance() {
-  const context = useContext(AttendanceContext)
+  const context = useContext(AttendanceContext);
   if (context === undefined) {
-    throw new Error("useAttendance must be used within an AttendanceProvider")
+    throw new Error("useAttendance must be used within an AttendanceProvider");
   }
-  return context
+  return context;
 }
 

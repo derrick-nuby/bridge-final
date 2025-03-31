@@ -1,7 +1,7 @@
 import * as XLSX from "xlsx";
 
 interface Student {
-  id: number;
+  id: string;
   name: string;
   isPresent: boolean;
   lastSeen: Date | null;
