@@ -3,6 +3,7 @@ import "./globals.css";
 import Providers from "./providers";
 import { generateMetadata, viewport } from "./metadata";
 import { Header } from "@/components/global/header";
+import Footer from "@/components/global/Footer";
 
 const workSans = Work_Sans({
   subsets: ["latin"],
@@ -22,6 +23,7 @@ export default function RootLayout({
         <Providers>
           <Header />
           {children}
+          <Footer />
         </Providers>
       </body>
     </html>
