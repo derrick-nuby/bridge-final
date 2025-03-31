@@ -1,0 +1,32 @@
+// Barrel file to export all components
+export { default as HeroSection } from "./HeroSection";
+export { default as ProblemStatement } from "./ProblemStatement";
+export { default as OurSolution } from "./OurSolution";
+export { default as LiveDemo } from "./LiveDemo";
+export { default as ArchitectureOverview } from "./ArchitectureOverview";
+export { default as AIModelTraining } from "./AIModelTraining";
+export { default as TechnologiesUsed } from "./TechnologiesUsed";
+export { default as ResearchProcess } from "./ResearchProcess";
+export { default as VoiceParticipationTracking } from "./VoiceParticipationTracking";
+export { default as RawFeaturesInference } from "./RawFeaturesInference";
+export { default as DevelopmentJourney } from "./DevelopmentJourney";
+export { default as ProjectStepsTaken } from "./ProjectStepsTaken";
+export { default as ScreenshotsUI } from "./ScreenshotsUI";
+export { default as DeploymentHosting } from "./DeploymentHosting";
+export { default as ChallengesFaced } from "./ChallengesFaced";
+export { default as SecurityPrivacy } from "./SecurityPrivacy";
+export { default as PerformanceOptimization } from "./PerformanceOptimization";
+export { default as BrowserCompatibility } from "./BrowserCompatibility";
+export { default as OpenSourceContribution } from "./OpenSourceContribution";
+export { default as TestingValidation } from "./TestingValidation";
+export { default as OurTeam } from "./OurTeam";
+export { default as CMUAfricaBridge } from "./CMUAfricaBridge";
+export { default as WhatWeLearned } from "./WhatWeLearned";
+export { default as VideoWalkthrough } from "./VideoWalkthrough";
+export { default as Testimonials } from "./Testimonials";
+export { default as TimelineMilestones } from "./TimelineMilestones";
+export { default as FAQs } from "./FAQs";
+export { default as Downloads } from "./Downloads";
+export { default as CreditsResources } from "./CreditsResources";
+export { default as ContactGitHub } from "./ContactGitHub"
+

@@ -1,7 +1,70 @@
-import React from 'react';
+import {
+  HeroSection,
+  ProblemStatement,
+  OurSolution,
+  // LiveDemo,
+  ArchitectureOverview,
+  AIModelTraining,
+  TechnologiesUsed,
+  // ResearchProcess,
+  VoiceParticipationTracking,
+  // RawFeaturesInference,
+  // DevelopmentJourney,
+  // ProjectStepsTaken,
+  // ScreenshotsUI,
+  DeploymentHosting,
+  ChallengesFaced,
+  SecurityPrivacy,
+  PerformanceOptimization,
+  BrowserCompatibility,
+  OpenSourceContribution,
+  // TestingValidation,
+  OurTeam,
+  CMUAfricaBridge,
+  // WhatWeLearned,
+  // VideoWalkthrough,
+  // Testimonials,
+  // TimelineMilestones,
+  FAQs,
+  // Downloads,
+  // CreditsResources,
+  ContactGitHub,
+} from "@/components/home";
 
-export default function page() {
+export default function HomePage() {
   return (
-    <div>Homepage</div>
+    <>
+      <HeroSection />
+      <ProblemStatement />
+      <OurSolution />
+      {/* <LiveDemo /> */}
+      <ArchitectureOverview />
+      <AIModelTraining />
+      <TechnologiesUsed />
+      {/* <ResearchProcess /> */}
+      <VoiceParticipationTracking />
+      {/* <RawFeaturesInference /> */}
+      {/* <DevelopmentJourney /> */}
+      {/* <ProjectStepsTaken /> */}
+      {/* <ScreenshotsUI /> */}
+      <DeploymentHosting />
+      <ChallengesFaced />
+      <SecurityPrivacy />
+      <PerformanceOptimization />
+      <BrowserCompatibility />
+      <OpenSourceContribution />
+      {/* <TestingValidation /> */}
+      <OurTeam />
+      <CMUAfricaBridge />
+      {/* <WhatWeLearned /> */}
+      {/* <VideoWalkthrough /> */}
+      {/* <Testimonials /> */}
+      {/* <TimelineMilestones /> */}
+      <FAQs />
+      {/* <Downloads /> */}
+      {/* <CreditsResources /> */}
+      <ContactGitHub />
+    </>
   );
 }
+
