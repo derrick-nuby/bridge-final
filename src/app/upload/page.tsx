@@ -17,6 +17,7 @@ const InferencePage = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [rawOutput, setRawOutput] = useState<string>("");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
   const [recognizedPerson, setRecognizedPerson] = useState<{
     label: string;
     confidence: number;
@@ -38,8 +39,7 @@ const InferencePage = () => {
     }
   }, [data]);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+  const processFile = (file: File) => {
     if (!file) return;
 
     // Create preview
@@ -52,6 +52,48 @@ const InferencePage = () => {
       processImage(result);
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      processFile(file);
+    }
+  };
+
+  const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isDragging) {
+      setIsDragging(true);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      // Check if it's an image
+      if (file.type.startsWith("image/")) {
+        processFile(file);
+      }
+    }
   };
 
   const processImage = (imageSrc: string) => {
@@ -111,13 +153,29 @@ const InferencePage = () => {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex justify-center">
-            <div className="relative overflow-hidden rounded-lg w-64 h-64 bg-muted flex items-center justify-center">
+            <div
+              className={`relative overflow-hidden rounded-lg w-64 h-64 flex items-center justify-center transition-colors duration-200 ${isDragging
+                ? "bg-primary/10 border-2 border-dashed border-primary"
+                : imagePreview
+                  ? "bg-muted"
+                  : "bg-muted border-2 border-dashed border-muted-foreground/25 hover:border-muted-foreground/50"
+                }`}
+              onDragEnter={handleDragEnter}
+              onDragLeave={handleDragLeave}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+              onClick={triggerFileInput}
+            >
               {imagePreview ? (
                 <Image src={imagePreview || "/placeholder.svg"} alt="Uploaded image" fill className="object-cover" />
               ) : (
                 <div className="text-center p-4">
-                  <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-2" />
-                  <p className="text-sm text-muted-foreground">Upload an image to identify</p>
+                  <Upload
+                    className={`h-12 w-12 mx-auto mb-2 ${isDragging ? "text-primary" : "text-muted-foreground"}`}
+                  />
+                  <p className={`text-sm ${isDragging ? "text-primary" : "text-muted-foreground"}`}>
+                    {isDragging ? "Drop image here" : "Drag & drop or click to upload"}
+                  </p>
                 </div>
               )}
               {isPending && (
