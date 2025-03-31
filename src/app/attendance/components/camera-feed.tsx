@@ -54,6 +54,7 @@ export function CameraFeed() {
     startCamera();
 
     return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       const stream = videoRef.current?.srcObject as MediaStream;
       stream?.getTracks().forEach((track) => track.stop());
 
@@ -95,6 +96,7 @@ export function CameraFeed() {
         clearInterval(intervalRef.current);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLiveMode, captureInterval]);
 
   const captureAndProcess = async () => {
