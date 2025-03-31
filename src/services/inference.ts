@@ -5,17 +5,56 @@ import { handleAxiosError } from "@/lib/errorHandler";
 
 // Types
 export interface ProjectInfo {
+  id: number;
   owner: string;
   name: string;
-  deploy_version: string;
+  deploy_version: number;
+  impulse_id: number;
+  impulse_name: string;
+}
+
+export interface Threshold {
+  id: number;
+  type: string;
+  min_score: number;
+}
+
+export interface ModelProperties {
+  frequency: number;
+  has_anomaly: number;
+  has_visual_anomaly_detection: boolean;
+  has_object_tracking: boolean;
+  input_features_count: number;
+  image_input_width: number;
+  image_input_height: number;
+  image_input_frames: number;
+  image_channel_count: number;
+  interval_ms: number;
+  label_count: number;
+  sensor: number;
+  model_type: string;
+  labels: string[];
+  input_width: number;
+  input_height: number;
+  frame_sample_count: number;
+  slice_size: number;
+  use_continuous_mode: boolean;
+  is_performance_calibration_enabled: boolean;
+  classification_threshold: number;
+  thresholds: Threshold[];
 }
 
 export interface ClassificationResult {
   success: boolean;
   data?: {
-    classification: Array<{
+    anomaly: number;
+    results: Array<{
       label: string;
-      probability: number;
+      value: number;
+      x: number;
+      y: number;
+      width: number;
+      height: number;
     }>;
   };
   message?: string;
@@ -25,8 +64,7 @@ export interface ModelInfo {
   success: boolean;
   data?: {
     project: ProjectInfo;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    properties: Record<string, any>;
+    properties: ModelProperties;
   };
   message?: string;
 }

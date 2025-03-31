@@ -11,6 +11,7 @@ import Link from "next/link";
 const InferencePage = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [rawOutput, setRawOutput] = useState<string>("");
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [recognizedPerson, setRecognizedPerson] = useState<{

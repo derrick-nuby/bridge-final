@@ -102,7 +102,7 @@ const ModelInfoPage = () => {
                   {Object.entries(data.data.properties)
                     .filter(
                       ([key]) =>
-                        !["labels", "thresholds"].includes(key) && typeof data.data.properties[key] !== "object",
+                        data.data && !["labels", "thresholds"].includes(key) && typeof data.data.properties[key as keyof typeof data.data.properties] !== "object",
                     )
                     .map(([key, value]) => (
                       <div key={key}>
