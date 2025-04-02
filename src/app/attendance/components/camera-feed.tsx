@@ -37,8 +37,8 @@ export function CameraFeed() {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: "user",
-            width: { ideal: 1280 },
-            height: { ideal: 720 },
+            width: { ideal: 96 },
+            height: { ideal: 96 },
           },
         });
         if (videoRef.current) {
@@ -202,7 +202,7 @@ export function CameraFeed() {
                   </div>
                   <Slider
                     id="interval"
-                    min={5}
+                    min={1}
                     max={30}
                     step={1}
                     value={[captureInterval]}

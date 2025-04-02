@@ -50,7 +50,7 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-medium">Project Specific</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              {["attendance", "inference", "live", "model-info", "raw", "upload", "steps-taken", "research-report"].map((route) => (
+              {["attendance", "inference", "live", "model-info", "raw", "upload", "upload-raw"].map((route) => (
                 <li key={route}>
                   <Link href={`/${route}`} className="hover:text-primary capitalize">
                     {route.replace("-", " ")}
